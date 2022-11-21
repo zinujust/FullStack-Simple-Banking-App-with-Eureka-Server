@@ -1,0 +1,39 @@
+server:
+  port: 8080
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
+spring:
+  application:
+    name: ApiGateway
+  cloud.gateway:
+    discovery:
+      locator:
+        enabled: true
+        lowerCaseServiceId: true
+    default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin   
+    globalcors:
+      corsConfigurations:
+        '[/**]':
+          allowedOrigins: "*"
+          allowedMethods: "*"
+          allowed-headers: "*" 
+    routes:
+    - id: users
+      uri: lb://Dollar-Bank-User
+      predicates:
+        - Path=/user/**
+    - id: savings
+      uri: lb://DOLLAR-BANK-SAVINGS
+      predicates:
+        - Path=/savings/**
+    - id: checking
+      uri: lb://DOLLAR-BANK-CHECKING
+      predicates:
+        - Path=/checking/**
+    - id: transaction
+      uri: lb://DOLLAR-BANK-TRANSACTIONS
+      predicates:
+        - Path=/transaction/**
