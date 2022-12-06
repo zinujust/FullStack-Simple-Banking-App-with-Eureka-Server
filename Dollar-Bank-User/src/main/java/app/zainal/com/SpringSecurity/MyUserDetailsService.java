@@ -30,7 +30,7 @@ public class MyUserDetailsService implements UserDetailsService {
 		Optional<BankUser> userFound = repo.findUserByEmail(username);
 		
 		// if username doesn't exist in the table, through an exception
-		if(userFound.isEmpty()) {
+		if(!userFound.isPresent()) {
 			throw new UsernameNotFoundException(username);
 		}
 		

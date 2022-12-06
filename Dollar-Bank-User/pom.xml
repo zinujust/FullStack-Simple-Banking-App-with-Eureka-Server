@@ -13,7 +13,7 @@
 	<name>Dollar-Bank-User</name>
 	<description>Dollar Bank User Module</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>1.8</java.version>
 		<spring-cloud.version>2021.0.4</spring-cloud.version>
 	</properties>
 	<dependencies>

@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  db:
+    container_name: mysql
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./dollar_bank_db.sql:/docker-entrypoint-initdb.d/dollar_bank_db.sql
+
+  eureka-server:
+    build: ./Dollar-Bank-Eureka-Server
+    image: zinujust/eureka-server
+    ports:
+      - "8761:8761"
+
+  eureka-gateway:
+    build: ./Dollar-Bank-Eureka-gateway
+    image: zinujust/eureka-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka-server
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+
+  dollar-bank-users:
+    build: ./Dollar-Bank-User
+    image: zinujust/dollar-bank-user
+    ports:
+      - "8001:8001"
+    depends_on:
+      - eureka-server
+      - eureka-gateway
+
+  dollar-bank-savings:
+    build: ./Dollar-Bank-Savings
+    image: zinujust/dollar-bank-savings
+    ports:
+      - "8002:8002"
+    depends_on:
+      - eureka-server
+      - eureka-gateway
+
+  dollar-bank-checking:
+    build: ./Dollar-Bank-Checking
+    image: zinujust/dollar-bank-checking
+    ports:
+      - "8003:8003"
+    depends_on:
+      - eureka-server
+      - eureka-gateway
+
+  dollar-bank-transactions:
+    build: ./Dollar-Bank-Transactions
+    image: zinujust/dollar-bank-transactions
+    ports:
+      - "8004:8004"
+    depends_on:
+      - eureka-server
+      - eureka-gateway

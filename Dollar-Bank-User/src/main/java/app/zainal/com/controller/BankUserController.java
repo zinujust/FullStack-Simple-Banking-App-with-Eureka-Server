@@ -43,7 +43,7 @@ public class BankUserController {
 
 		Optional<BankUser> found = bankUserRepo.findById(id);
 
-		if (found.isEmpty()) {
+		if (!found.isPresent()) {
 			return ResponseEntity.status(404).body("User not found");
 		}
 
